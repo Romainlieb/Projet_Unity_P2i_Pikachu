@@ -15,6 +15,7 @@ public class Tortue : MonoBehaviour
     private Rigidbody rb;
     private bool jumpRequested;
 
+    // Shield state
     private bool isInvincible = false;
 
     private Renderer rend;
@@ -48,6 +49,17 @@ public class Tortue : MonoBehaviour
         jumpRequested = false;
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        // Only pipes cause damage
+        if (!collision.collider.CompareTag("Pipe")) return;
+
+        // If shield is active, ignore damage
+        if (isInvincible) return;
+
+    }
+
+    // Called by BouclierMover when collected
     public void ActivateShield(float duration)
     {
         if (shieldRoutine != null) StopCoroutine(shieldRoutine);
@@ -58,10 +70,10 @@ public class Tortue : MonoBehaviour
     {
         isInvincible = true;
 
-        // pass through pipes
+        // Pass through pipes during shield
         Physics.IgnoreLayerCollision(PLAYER_LAYER, PIPE_LAYER, true);
 
-        // optional transparency
+        // Optional: semi-transparent
         if (rend != null)
         {
             Color c = rend.material.color;
@@ -71,10 +83,10 @@ public class Tortue : MonoBehaviour
 
         yield return new WaitForSeconds(duration);
 
-        // restore collisions
+        // Restore collisions
         Physics.IgnoreLayerCollision(PLAYER_LAYER, PIPE_LAYER, false);
 
-        // restore visibility
+        // Restore visibility
         if (rend != null)
             rend.material.color = originalColor;
 
