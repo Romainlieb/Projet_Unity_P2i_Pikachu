@@ -13,8 +13,8 @@ public class VieMover : MonoBehaviour
     // =========================
     // SPAWN TIME
     // =========================
-    public float minSpawnTime = 20f;  // minimum time before spawn
-    public float maxSpawnTime = 30f;  // maximum time before spawn
+    public float minSpawnTime = 40f;  // minimum time before spawn
+    public float maxSpawnTime = 50f;  // maximum time before spawn
 
     // =========================
     // VERTICAL RANDOM
@@ -98,8 +98,6 @@ public class VieMover : MonoBehaviour
         if (systemeVie == null) return;
 
         systemeVie.ChangeHealth(1);
-
-        // Instead of Destroy(gameObject), we hide it so it can respawn later
         HideLife();
     }
 }
