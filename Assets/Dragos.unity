@@ -127,9 +127,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2853614843343139427, guid: d6246d819c399434fbb74c1587fd2a2d, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3366264916536543026, guid: d6246d819c399434fbb74c1587fd2a2d, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 4325325480643747908, guid: d6246d819c399434fbb74c1587fd2a2d, type: 3}
       propertyPath: m_Name
       value: Pipes
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325325480643747908, guid: d6246d819c399434fbb74c1587fd2a2d, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4325325480643747908, guid: d6246d819c399434fbb74c1587fd2a2d, type: 3}
       propertyPath: m_TagString
@@ -178,6 +190,14 @@ PrefabInstance:
     - target: {fileID: 5870568159255549503, guid: d6246d819c399434fbb74c1587fd2a2d, type: 3}
       propertyPath: m_ProvidesContacts
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8612822317081626708, guid: d6246d819c399434fbb74c1587fd2a2d, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8807554670875515929, guid: d6246d819c399434fbb74c1587fd2a2d, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -424,9 +444,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6838f0bb8d324743adac5cda27cf68c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 3
+  leftLimitX: -12
+  spawnX: 3
   minSpawnTime: 20
   maxSpawnTime: 30
-  spawnX: 3
   minY: -2
   maxY: 2
   shieldDuration: 5
@@ -592,7 +614,8 @@ GameObject:
   - component: {fileID: 1648900946}
   - component: {fileID: 1648900951}
   - component: {fileID: 1648900952}
-  m_Layer: 0
+  - component: {fileID: 1648900953}
+  m_Layer: 6
   m_Name: Tortue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -728,6 +751,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpForce: 5
+--- !u!114 &1648900953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1648900945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2363ef5e26e1e448f88dd3fc22250c9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  invincibleAlpha: 0.5
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

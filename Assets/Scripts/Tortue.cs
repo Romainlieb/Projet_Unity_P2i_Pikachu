@@ -6,83 +6,79 @@ using System.Collections;
 public class Tortue : MonoBehaviour
 {
     [Header("Jump")]
-    public float jumpForce = 5f;   // Jump strength
+    public float jumpForce = 5f;
 
-    // =========================
-    // Private variables
-    // =========================
-    private Rigidbody rb;          // Player Rigidbody (3D)
-    private bool jumpRequested;    // Input flag
+    // Layers (your setup)
+    private const int PLAYER_LAYER = 6;
+    private const int PIPE_LAYER = 7;
 
-    // =========================
-    // Shield state
-    // =========================
-    private bool isInvincible = false;   // True while shield is active
+    private Rigidbody rb;
+    private bool jumpRequested;
+
+    private bool isInvincible = false;
+
+    private Renderer rend;
+    private Color originalColor;
+    private Coroutine shieldRoutine;
 
     void Awake()
     {
-        // Get the Rigidbody attached to the player
         rb = GetComponent<Rigidbody>();
+
+        rend = GetComponent<Renderer>();
+        if (rend != null)
+            originalColor = rend.material.color;
     }
 
     void Update()
     {
-        // Read input in Update
         if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
             jumpRequested = true;
     }
 
     void FixedUpdate()
     {
-        // Apply physics in FixedUpdate
         if (!jumpRequested) return;
 
-        // Reset vertical velocity for Flappy-like jump
         var v = rb.linearVelocity;
         v.y = 0f;
         rb.linearVelocity = v;
 
-        // Add upward impulse
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-
-        // Reset input flag
         jumpRequested = false;
     }
 
-    // =========================
-    // Collision with obstacles (pipes)
-    // =========================
-    private void OnCollisionEnter(Collision collision)
-    {
-        // Ignore damage if shield is active
-        if (isInvincible) return;
-
-        // Only detect pipes (optional but recommended)
-        if (collision.collider.CompareTag("Pipe"))
-        {
-            Debug.Log("Hit pipe (no health system yet)");
-        }
-    }
-
-    // =========================
-    // Shield activation (called by Bouclier.cs)
-    // =========================
     public void ActivateShield(float duration)
     {
-        // Restart shield timer if already active
-        StopAllCoroutines();
-        StartCoroutine(ShieldCoroutine(duration));
+        if (shieldRoutine != null) StopCoroutine(shieldRoutine);
+        shieldRoutine = StartCoroutine(ShieldCoroutine(duration));
     }
 
     private IEnumerator ShieldCoroutine(float duration)
     {
-        // Enable invincibility
         isInvincible = true;
 
-        // Wait for shield duration
+        // pass through pipes
+        Physics.IgnoreLayerCollision(PLAYER_LAYER, PIPE_LAYER, true);
+
+        // optional transparency
+        if (rend != null)
+        {
+            Color c = rend.material.color;
+            c.a = 0.5f;
+            rend.material.color = c;
+        }
+
         yield return new WaitForSeconds(duration);
 
-        // Disable invincibility
+        // restore collisions
+        Physics.IgnoreLayerCollision(PLAYER_LAYER, PIPE_LAYER, false);
+
+        // restore visibility
+        if (rend != null)
+            rend.material.color = originalColor;
+
         isInvincible = false;
+        shieldRoutine = null;
     }
 }
