@@ -8,7 +8,7 @@ public class Tortue : MonoBehaviour
     [Header("Jump")]
     public float jumpForce = 5f;
 
-    // Layers (your setup)
+    // Layers
     private const int PLAYER_LAYER = 6;
     private const int PIPE_LAYER = 7;
 
@@ -41,6 +41,7 @@ public class Tortue : MonoBehaviour
     {
         if (!jumpRequested) return;
 
+        // Reset vertical velocity for jump
         var v = rb.linearVelocity;
         v.y = 0f;
         rb.linearVelocity = v;
@@ -50,16 +51,23 @@ public class Tortue : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision collision)
-    {
-        // Only pipes cause damage
-        if (!collision.collider.CompareTag("Pipe")) return;
+{
+    // Detect collision with on Pipes layer 
+    if (collision.gameObject.layer != LayerMask.NameToLayer("Pipes"))
+        return;
 
-        // If shield is active, ignore damage
-        if (isInvincible) return;
+    // If shield is active, ignore damage
+    if (isInvincible) return;
+
+    // Apply damage
+    SystemeVie systemeVie = FindFirstObjectByType<SystemeVie>();
+    if (systemeVie != null)
+    {
+        systemeVie.ChangeHealth(-1);
+    }
 
     }
 
-    // Called by BouclierMover when collected
     public void ActivateShield(float duration)
     {
         if (shieldRoutine != null) StopCoroutine(shieldRoutine);
@@ -73,7 +81,7 @@ public class Tortue : MonoBehaviour
         // Pass through pipes during shield
         Physics.IgnoreLayerCollision(PLAYER_LAYER, PIPE_LAYER, true);
 
-        // Optional: semi-transparent
+        // Semi-transparent ?? to see exactly with the tortue player how it work !! 
         if (rend != null)
         {
             Color c = rend.material.color;

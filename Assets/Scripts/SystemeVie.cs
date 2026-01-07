@@ -5,9 +5,12 @@ public class SystemeVie : MonoBehaviour
     public int maxHealth = 3;
     int currentHealth;
 
+    // read-only property (tutorial requirement)
+    public int health { get { return currentHealth; } }
+
     void Start()
     {
-        currentHealth = maxHealth;
+        currentHealth = maxHealth;   // start game with full health
         Debug.Log(currentHealth + "/" + maxHealth);
     }
 

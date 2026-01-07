@@ -4,7 +4,7 @@ using System.Collections;
 public class BouclierMover : MonoBehaviour
 {
     // =========================
-    // MOVEMENT (like pipes)
+    // MOVEMENT 
     // =========================
     public float speed = 3f;          // speed moving left
     public float leftLimitX = -12f;   // when to hide after passing player
@@ -58,7 +58,6 @@ public class BouclierMover : MonoBehaviour
 
         transform.position += Vector3.left * speed * Time.deltaTime;
 
-        // if it goes past the player without being collected
         if (transform.position.x <= leftLimitX)
         {
             HideShield();

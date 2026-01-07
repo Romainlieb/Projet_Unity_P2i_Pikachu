@@ -1,10 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
-public class VieMover : MonoBehaviour
+public class VieCollectible : MonoBehaviour
 {
     // =========================
-    // MOVEMENT (like pipes)
+    // MOVEMENT
     // =========================
     public float speed = 3f;          // speed moving left
     public float leftLimitX = -12f;   // when to hide after passing player
@@ -90,14 +90,15 @@ public class VieMover : MonoBehaviour
     // COLLECTION 
     // =========================
     void OnTriggerEnter(Collider other)
+{
+    Tortue tortue = other.GetComponent<Tortue>();
+    SystemeVie systemeVie = FindFirstObjectByType<SystemeVie>();
+
+    if (tortue != null && systemeVie != null && systemeVie.health < systemeVie.maxHealth)
     {
-        Tortue tortue = other.GetComponent<Tortue>();
-        if (tortue == null) return;
-
-        SystemeVie systemeVie = FindFirstObjectByType<SystemeVie>();
-        if (systemeVie == null) return;
-
         systemeVie.ChangeHealth(1);
         HideLife();
     }
+}
+
 }
