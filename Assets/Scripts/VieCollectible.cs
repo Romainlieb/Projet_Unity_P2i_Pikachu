@@ -6,21 +6,28 @@ public class VieCollectible : MonoBehaviour
     // =========================
     // MOVEMENT
     // =========================
-    public float speed = 3f;          // speed moving left
-    public float leftLimitX = -12f;   // when to hide after passing player
-    public float spawnX = 12f;        // where it appears (right side)
+    public float speed = 3f;
+    public float leftLimitX = -12f;
+    public float spawnX = 12f;
 
     // =========================
     // SPAWN TIME
     // =========================
-    public float minSpawnTime = 40f;  // minimum time before spawn
-    public float maxSpawnTime = 50f;  // maximum time before spawn
+    public float minSpawnTime = 40f;
+    public float maxSpawnTime = 50f;
 
     // =========================
     // VERTICAL RANDOM
     // =========================
     public float minY = -2f;
     public float maxY = 2f;
+
+    // =========================
+    // AUDIO
+    // =========================
+    [Header("Audio")]
+    public AudioClip collectSound;
+    [Range(0f, 1f)] public float collectVolume = 1f;
 
     // =========================
     // INTERNAL STATE
@@ -49,17 +56,14 @@ public class VieCollectible : MonoBehaviour
         transform.position += Vector3.left * speed * Time.deltaTime;
 
         if (transform.position.x <= leftLimitX)
-        {
             HideLife();
-        }
     }
 
     IEnumerator SpawnRoutine()
     {
         while (true)
         {
-            float waitTime = Random.Range(minSpawnTime, maxSpawnTime);
-            yield return new WaitForSeconds(waitTime);
+            yield return new WaitForSeconds(Random.Range(minSpawnTime, maxSpawnTime));
 
             float y = Random.Range(minY, maxY);
             transform.position = new Vector3(spawnX, y, transform.position.z);
@@ -73,32 +77,39 @@ public class VieCollectible : MonoBehaviour
     void ShowLife()
     {
         isActive = true;
-
-        if (rend != null) rend.enabled = true;
-        if (col != null) col.enabled = true;
+        if (rend) rend.enabled = true;
+        if (col) col.enabled = true;
     }
 
     void HideLife()
     {
         isActive = false;
-
-        if (rend != null) rend.enabled = false;
-        if (col != null) col.enabled = false;
+        if (rend) rend.enabled = false;
+        if (col) col.enabled = false;
     }
 
     // =========================
-    // COLLECTION 
+    // COLLECTION
     // =========================
     void OnTriggerEnter(Collider other)
-{
-    Tortue tortue = other.GetComponent<Tortue>();
-    SystemeVie systemeVie = FindFirstObjectByType<SystemeVie>();
-
-    if (tortue != null && systemeVie != null && systemeVie.health < systemeVie.maxHealth)
     {
+        Tortue tortue = other.GetComponent<Tortue>();
+        if (tortue == null) return;
+
+        SystemeVie systemeVie = FindFirstObjectByType<SystemeVie>();
+        if (systemeVie == null) return;
+
+        if (systemeVie.health >= systemeVie.maxHealth)
+            return;
+
         systemeVie.ChangeHealth(1);
+
+        // 🔊 AUDIO JELLYFISH
+        if (Son_jellyFish.Instance != null)
+        {
+            Son_jellyFish.Instance.PlaySound(collectSound, collectVolume);
+        }
+
         HideLife();
     }
-}
-
 }
