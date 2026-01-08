@@ -28,6 +28,13 @@ public class BouclierMover : MonoBehaviour
     public float shieldDuration = 5f;
 
     // =========================
+    // AUDIO
+    // =========================
+    [Header("Audio")]
+    public AudioClip shieldSound;
+    [Range(0f, 1f)] public float shieldVolume = 1f;
+
+    // =========================
     // INTERNAL STATE
     // =========================
     private bool isActive = false;
@@ -110,6 +117,12 @@ public class BouclierMover : MonoBehaviour
 
         // activate shield on player
         player.ActivateShield(shieldDuration);
+
+        // 🔊 AUDIO BOUCLIER
+        if (Son_Bouclier.Instance != null)
+        {
+            Son_Bouclier.Instance.PlaySound(shieldSound, shieldVolume);
+        }
 
         // hide shield after collection
         HideShield();
