@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class Invulnerability : MonoBehaviour
+public class Invulnerabilité : MonoBehaviour
 {
     [Header("Invincibility")]
     public float invincibleAlpha = 0.5f;   // transparency while invincible

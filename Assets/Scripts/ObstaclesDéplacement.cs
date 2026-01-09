@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-public class ObstacleMover : MonoBehaviour
+public class ObstaclesDéplacement : MonoBehaviour
 {
     public float speed = 3f;
     public float leftLimitX = -12f;   
