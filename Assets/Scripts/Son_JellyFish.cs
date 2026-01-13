@@ -8,7 +8,7 @@ public class Son_jellyFish : MonoBehaviour
 
     void Awake()
     {
-        // Singleton simple
+        
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -23,7 +23,7 @@ public class Son_jellyFish : MonoBehaviour
             audioSource = gameObject.AddComponent<AudioSource>();
 
         audioSource.playOnAwake = false;
-        audioSource.spatialBlend = 0f; // 2D sound
+        audioSource.spatialBlend = 0f; 
     }
 
     public void PlaySound(AudioClip clip, float volume = 1f)

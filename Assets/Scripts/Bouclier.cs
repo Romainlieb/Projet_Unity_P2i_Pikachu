@@ -44,7 +44,7 @@ public class BouclierMover : MonoBehaviour
 
     void Awake()
     {
-        // cache components
+       
         rend = GetComponent<Renderer>();
         col = GetComponent<Collider>();
     }
@@ -75,15 +75,15 @@ public class BouclierMover : MonoBehaviour
     {
         while (true)
         {
-            // wait 20–30 seconds
+            
             float waitTime = Random.Range(minSpawnTime, maxSpawnTime);
             yield return new WaitForSeconds(waitTime);
 
-            // random Y position
+           
             float y = Random.Range(minY, maxY);
             transform.position = new Vector3(spawnX, y, transform.position.z);
 
-            // show and activate
+         
             ShowShield();
 
             // wait until collected or passed

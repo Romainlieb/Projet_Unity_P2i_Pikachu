@@ -8,27 +8,27 @@ public class Tortue : MonoBehaviour
     [Header("Jump")]
     public float jumpForce = 5f;
 
-    // Layers
-    private const int PLAYER_LAYER = 6;
-    private const int PIPE_LAYER = 7;
+    
+    private const int PLAYER_LAYER = 6; // Tortue layer 
+    private const int PIPE_LAYER = 7; // Pipes/ obstacles layer
 
     private Rigidbody rb;
     private bool jumpRequested;
 
     // Shield state
     private bool isInvincible = false;
-
-    private Renderer rend;
-    private Color originalColor;
     private Coroutine shieldRoutine;
+
+    [Header("Shield Visual")]
+    public GameObject shieldBubble; 
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
 
-        rend = GetComponent<Renderer>();
-        if (rend != null)
-            originalColor = rend.material.color;
+        // Bubble off by default
+        if (shieldBubble != null)
+            shieldBubble.SetActive(false);
     }
 
     void Update()
@@ -41,7 +41,7 @@ public class Tortue : MonoBehaviour
     {
         if (!jumpRequested) return;
 
-        // Reset vertical velocity for jump
+     
         var v = rb.linearVelocity;
         v.y = 0f;
         rb.linearVelocity = v;
@@ -51,23 +51,21 @@ public class Tortue : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision collision)
-{
-    // Detect collision with on Pipes layer 
-    if (collision.gameObject.layer != LayerMask.NameToLayer("Pipes"))
-        return;
-
-    // If shield is active, ignore damage
-    if (isInvincible) return;
-
-    // Apply damage
-    SystemeVie systemeVie = FindFirstObjectByType<SystemeVie>();
-    if (systemeVie != null)
     {
-        systemeVie.ChangeHealth(-1);
+        // Only react to layer pipes (obstacles/pipes)
+        if (collision.gameObject.layer != LayerMask.NameToLayer("Pipes"))
+            return;
+
+        // If shield is active, ignore damage
+        if (isInvincible) return;
+
+        // Apply damage
+        SystemeVie systemeVie = FindFirstObjectByType<SystemeVie>();
+        if (systemeVie != null)
+            systemeVie.ChangeHealth(-1);
     }
 
-    }
-
+    // Called by BouclierMover when collected
     public void ActivateShield(float duration)
     {
         if (shieldRoutine != null) StopCoroutine(shieldRoutine);
@@ -78,25 +76,21 @@ public class Tortue : MonoBehaviour
     {
         isInvincible = true;
 
-        // Pass through pipes during shield
+        // Pass through obstacles during shield
         Physics.IgnoreLayerCollision(PLAYER_LAYER, PIPE_LAYER, true);
 
-        // Semi-transparent ?? to see exactly with the tortue player how it work !! 
-        if (rend != null)
-        {
-            Color c = rend.material.color;
-            c.a = 0.5f;
-            rend.material.color = c;
-        }
+        // Bubble ON
+        if (shieldBubble != null)
+            shieldBubble.SetActive(true);
 
         yield return new WaitForSeconds(duration);
 
         // Restore collisions
         Physics.IgnoreLayerCollision(PLAYER_LAYER, PIPE_LAYER, false);
 
-        // Restore visibility
-        if (rend != null)
-            rend.material.color = originalColor;
+        // Bubble OFF
+        if (shieldBubble != null)
+            shieldBubble.SetActive(false);
 
         isInvincible = false;
         shieldRoutine = null;

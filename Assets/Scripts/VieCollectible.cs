@@ -104,7 +104,7 @@ public class VieCollectible : MonoBehaviour
 
         systemeVie.ChangeHealth(1);
 
-        // 🔊 AUDIO JELLYFISH
+        // AUDIO JELLYFISH
         if (Son_jellyFish.Instance != null)
         {
             Son_jellyFish.Instance.PlaySound(collectSound, collectVolume);

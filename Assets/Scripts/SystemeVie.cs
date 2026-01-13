@@ -6,7 +6,6 @@ public class SystemeVie : MonoBehaviour
     public int maxHealth = 3;
     int currentHealth;
 
-    // read-only property
     public int health { get { return currentHealth; } }
 
     [Header("Game Over")]

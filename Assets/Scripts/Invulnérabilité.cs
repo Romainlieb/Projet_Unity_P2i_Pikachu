@@ -1,13 +1,14 @@
+// Invulnerabilité.cs
 using UnityEngine;
 using System.Collections;
 
 public class Invulnerabilité : MonoBehaviour
 {
     [Header("Invincibility")]
-    public float invincibleAlpha = 0.5f;   // transparency while invincible
+    public float invincibleAlpha = 0.5f;
 
     private const int PLAYER_LAYER = 6;    // Tortue layer
-    private const int PIPE_LAYER = 7;      // Pipes layer
+    private const int PIPE_LAYER = 7;      // Pipes/obstacles layer
 
     private Renderer rend;
     private Color originalColor;
@@ -31,14 +32,6 @@ public class Invulnerabilité : MonoBehaviour
     {
         // Pass through pipes
         Physics.IgnoreLayerCollision(PLAYER_LAYER, PIPE_LAYER, true);
-
-        // Visual feedback (semi-transparent)
-        if (rend != null)
-        {
-            Color c = rend.material.color;
-            c.a = invincibleAlpha;
-            rend.material.color = c;
-        }
 
         yield return new WaitForSeconds(duration);
 
