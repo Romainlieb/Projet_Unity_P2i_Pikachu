@@ -16,6 +16,7 @@ public class Tortue : MonoBehaviour
     private bool jumpRequested;
     private Collider tortueCollider;
 
+
     // Shield state
     private bool isInvincible = false;
     private Coroutine shieldRoutine;
@@ -76,8 +77,8 @@ public class Tortue : MonoBehaviour
     private IEnumerator DisableColliderTemporarily()
     {
         tortueCollider.enabled = false;
+        ActivateShield(3f);
         yield return new WaitForSeconds(3f);
-        
         tortueCollider.enabled = true;
     }
 
