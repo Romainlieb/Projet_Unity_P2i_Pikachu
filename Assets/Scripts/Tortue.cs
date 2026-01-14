@@ -14,6 +14,7 @@ public class Tortue : MonoBehaviour
 
     private Rigidbody rb;
     private bool jumpRequested;
+    private Collider tortueCollider;
 
     // Shield state
     private bool isInvincible = false;
@@ -25,6 +26,7 @@ public class Tortue : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        tortueCollider = GetComponent<Collider>();
 
         // Bubble off by default
         if (shieldBubble != null)
@@ -62,7 +64,21 @@ public class Tortue : MonoBehaviour
         // Apply damage
         SystemeVie systemeVie = FindFirstObjectByType<SystemeVie>();
         if (systemeVie != null)
+            // On retire 1 point de vie
             systemeVie.ChangeHealth(-1);
+
+        // If collider is not null, start the coroutine to disable it temporarily
+        if (tortueCollider != null)
+            StartCoroutine(DisableColliderTemporarily());
+    }
+
+    // Function to disable the collider temporarily for 3 seconds
+    private IEnumerator DisableColliderTemporarily()
+    {
+        tortueCollider.enabled = false;
+        yield return new WaitForSeconds(3f);
+        
+        tortueCollider.enabled = true;
     }
 
     // Called by BouclierMover when collected
