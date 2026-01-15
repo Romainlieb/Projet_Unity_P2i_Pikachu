@@ -394,7 +394,7 @@ MonoBehaviour:
   minY: -2
   maxY: 2
   shieldDuration: 5
-  shieldSound: {fileID: 8300000, guid: 1be92abe8e9224e5ea7d9859e32c8053, type: 3}
+  shieldSound: {fileID: 8300000, guid: 6c9a830c567ad495c806c075ae873ac7, type: 3}
   shieldVolume: 1
 --- !u!54 &337218310
 Rigidbody:
@@ -459,8 +459,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpForce: 4
-  damageInvulnDuration: 1.2
-  blinkInterval: 1.2
   shieldBubble: {fileID: 1532256535}
 --- !u!54 &383167441
 Rigidbody:
@@ -1679,7 +1677,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 0.01
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
