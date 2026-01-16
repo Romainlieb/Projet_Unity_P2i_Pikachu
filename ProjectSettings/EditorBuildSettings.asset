@@ -8,6 +8,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes Mehrnaz/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/MainMenu-UI.unity
+    guid: ab353a6df065a6447ba3044c22763447
+  - enabled: 1
+    path: Assets/GameScene.unity
+    guid: 9f177e8e5267c4b359eedc77ab6dfc8c
+  - enabled: 1
+    path: Assets/SecondMenu-UI.unity
+    guid: 8aee5259de05c7141a629c48cb928b6b
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
