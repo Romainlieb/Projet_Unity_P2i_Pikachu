@@ -119,8 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
-<<<<<<< HEAD
-=======
 --- !u!1001 &126390729
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -882,7 +880,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1011919167}
   m_CullTransparentMesh: 1
->>>>>>> 0e5be09d (coeur)
 --- !u!1 &1095313096
 GameObject:
   m_ObjectHideFlags: 0
@@ -975,8 +972,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-<<<<<<< HEAD
-=======
 --- !u!1 &1251783425
 GameObject:
   m_ObjectHideFlags: 0
@@ -1320,7 +1315,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1627923867}
   m_CullTransparentMesh: 1
->>>>>>> 0e5be09d (coeur)
 --- !u!1 &1634676609
 GameObject:
   m_ObjectHideFlags: 0
@@ -1584,3 +1578,4 @@ SceneRoots:
   m_Roots:
   - {fileID: 1095313099}
   - {fileID: 1634676611}
+  - {fileID: 126390729}
