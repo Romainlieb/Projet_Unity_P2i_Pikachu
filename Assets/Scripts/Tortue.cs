@@ -8,21 +8,23 @@ public class Tortue : MonoBehaviour
     [Header("Jump")]
     public float jumpForce = 5f;
 
-    
     private const int PLAYER_LAYER = 6; // Tortue layer 
-    private const int PIPE_LAYER = 7; // Pipes/ obstacles layer
+    private const int PIPE_LAYER = 7;   // Pipes / obstacles layer
 
     private Rigidbody rb;
     private bool jumpRequested;
     private Collider tortueCollider;
-
 
     // Shield state
     private bool isInvincible = false;
     private Coroutine shieldRoutine;
 
     [Header("Shield Visual")]
-    public GameObject shieldBubble; 
+    public GameObject shieldBubble;
+
+    [Header("Vertical Limits")]
+    public float minY = -4f;
+    public float maxY = 4f;
 
     void Awake()
     {
@@ -44,7 +46,6 @@ public class Tortue : MonoBehaviour
     {
         if (!jumpRequested) return;
 
-     
         var v = rb.linearVelocity;
         v.y = 0f;
         rb.linearVelocity = v;
@@ -53,27 +54,31 @@ public class Tortue : MonoBehaviour
         jumpRequested = false;
     }
 
+    //  LIMITES VERTICALES (
+    void LateUpdate()
+    {
+        Vector3 pos = transform.position;
+        pos.y = Mathf.Clamp(pos.y, minY, maxY);
+        transform.position = pos;
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
-        // Only react to layer pipes (obstacles/pipes)
+        // Only react to obstacles
         if (collision.gameObject.layer != LayerMask.NameToLayer("Pipes"))
             return;
 
-        // If shield is active, ignore damage
+        // Ignore damage if shield is active
         if (isInvincible) return;
 
-        // Apply damage
         SystemeVie systemeVie = FindFirstObjectByType<SystemeVie>();
         if (systemeVie != null)
-            // On retire 1 point de vie
             systemeVie.ChangeHealth(-1);
 
-        // If collider is not null, start the coroutine to disable it temporarily
         if (tortueCollider != null)
             StartCoroutine(DisableColliderTemporarily());
     }
 
-    // Function to disable the collider temporarily for 3 seconds
     private IEnumerator DisableColliderTemporarily()
     {
         tortueCollider.enabled = false;
@@ -82,7 +87,7 @@ public class Tortue : MonoBehaviour
         tortueCollider.enabled = true;
     }
 
-    // Called by BouclierMover when collected
+    // Called by BouclierMover
     public void ActivateShield(float duration)
     {
         if (shieldRoutine != null) StopCoroutine(shieldRoutine);
@@ -93,19 +98,15 @@ public class Tortue : MonoBehaviour
     {
         isInvincible = true;
 
-        // Pass through obstacles during shield
         Physics.IgnoreLayerCollision(PLAYER_LAYER, PIPE_LAYER, true);
 
-        // Bubble ON
         if (shieldBubble != null)
             shieldBubble.SetActive(true);
 
         yield return new WaitForSeconds(duration);
 
-        // Restore collisions
         Physics.IgnoreLayerCollision(PLAYER_LAYER, PIPE_LAYER, false);
 
-        // Bubble OFF
         if (shieldBubble != null)
             shieldBubble.SetActive(false);
 
