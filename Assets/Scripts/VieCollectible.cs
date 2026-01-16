@@ -104,6 +104,9 @@ public class VieCollectible : MonoBehaviour
 
         systemeVie.ChangeHealth(1);
 
+        // Enable one heart in UI
+        tortue.EnableHeart();
+
         // AUDIO JELLYFISH
         if (Son_jellyFish.Instance != null)
         {

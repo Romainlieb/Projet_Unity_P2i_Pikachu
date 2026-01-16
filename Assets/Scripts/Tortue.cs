@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Tortue : MonoBehaviour
@@ -19,6 +21,9 @@ public class Tortue : MonoBehaviour
     private bool isInvincible = false;
     private Coroutine shieldRoutine;
 
+    // Hearts UI
+    private List<GameObject> hearts = new List<GameObject>();
+
     [Header("Shield Visual")]
     public GameObject shieldBubble;
 
@@ -31,9 +36,67 @@ public class Tortue : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         tortueCollider = GetComponent<Collider>();
 
+        // Reset collision layers to ensure detection works after scene reload
+        Physics.IgnoreLayerCollision(PLAYER_LAYER, PIPE_LAYER, false);
+
+        // Reset invincibility state
+        isInvincible = false;
+        if (shieldRoutine != null)
+        {
+            StopCoroutine(shieldRoutine);
+            shieldRoutine = null;
+        }
+
+        // Reset jump state
+        jumpRequested = false;
+
+        // Ensure collider is enabled
+        if (tortueCollider != null)
+            tortueCollider.enabled = true;
+
         // Bubble off by default
         if (shieldBubble != null)
             shieldBubble.SetActive(false);
+
+        // Find all Heart(Clone) in the Canvas
+        FindHearts();
+
+        // Reactivate all hearts on scene start
+        ReactivateAllHearts();
+    }
+
+    void Start()
+    {
+        // Reset velocity to zero when scene starts/reloads
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+    }
+
+    private void FindHearts()
+    {
+        hearts.Clear();
+        Canvas canvas = FindFirstObjectByType<Canvas>();
+        if (canvas == null) return;
+
+        // Find Panel in Canvas
+        Transform panel = canvas.transform.Find("Panel");
+        if (panel == null) return;
+
+        // Find all Heart(Clone) children
+        for (int i = 0; i < panel.childCount; i++)
+        {
+            Transform child = panel.GetChild(i);
+            if (child.name.Contains("Heart(Clone)"))
+            {
+                hearts.Add(child.gameObject);
+            }
+        }
+
+        // Sort by sibling index to maintain order
+        hearts = hearts.OrderBy(h => h.transform.GetSiblingIndex()).ToList();
     }
 
     void Update()
@@ -75,6 +138,9 @@ public class Tortue : MonoBehaviour
         if (systemeVie != null)
             systemeVie.ChangeHealth(-1);
 
+        // Disable one heart in UI
+        DisableHeart();
+
         if (tortueCollider != null)
             StartCoroutine(DisableColliderTemporarily());
     }
@@ -112,5 +178,42 @@ public class Tortue : MonoBehaviour
 
         isInvincible = false;
         shieldRoutine = null;
+    }
+
+    private void DisableHeart()
+    {
+        // Find the first active heart and disable it
+        foreach (GameObject heart in hearts)
+        {
+            if (heart != null && heart.activeSelf)
+            {
+                heart.SetActive(false);
+                return;
+            }
+        }
+    }
+
+    // Public method to enable a heart when health is recovered
+    public void EnableHeart()
+    {
+        // Find the first inactive heart and enable it (from left to right)
+        foreach (GameObject heart in hearts)
+        {
+            if (heart != null && !heart.activeSelf)
+            {
+                heart.SetActive(true);
+                return;
+            }
+        }
+    }
+
+    private void ReactivateAllHearts()
+    {
+        // Reactivate all hearts when scene starts/reloads
+        foreach (GameObject heart in hearts)
+        {
+            if (heart != null)
+                heart.SetActive(true);
+        }
     }
 }
